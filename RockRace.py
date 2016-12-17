@@ -36,7 +36,7 @@ rock = pygame.image.load('rock.png')
 
 
 def things_dodged(count):
-    font = pygame.font.SysFont(None, 25)
+    font = pygame.font.SysFont("comicsansms", 25)
     text = font.render("Dodged: " + str(count), True, yellow)
     gameDisplay.blit(text, (0,0))
 
@@ -53,7 +53,7 @@ def text_objects(text, font, color):
     
 
 def message_display(text):
-    largeText = pygame.font.Font('freesansbold.ttf', 45)
+    largeText = pygame.font.SysFont("comicsansms", 45)
     TextSurf, TextRect = text_objects(text, largeText, green)
     TextRect.center = ((display_width/2),(display_height/2))
     gameDisplay.blit (TextSurf, TextRect)
@@ -84,7 +84,7 @@ def button(msg,xPos,yPos,width,height,inactiveColor,activeColor,textColor, func=
         else:
             pygame.draw.rect(gameDisplay, inactiveColor, (xPos,yPos,width,height))
 
-        smallText = pygame.font.Font('freesansbold.ttf', 20)
+        smallText = pygame.font.SysFont("comicsansms", 20)
         textSurf, textRect = text_objects(msg, smallText, textColor)
         textRect.center = ( (xPos+(width/2)), (yPos+(height/2)) )
         gameDisplay.blit(textSurf, textRect)
@@ -104,7 +104,7 @@ def game_intro():
             
             
         gameDisplay.fill(white)
-        largeText = pygame.font.Font('freesansbold.ttf',115)
+        largeText = pygame.font.SysFont("comicsansms",115)
         TextSurf, TextRect = text_objects("Rock Race", largeText, black)
         TextRect.center = ((display_width/2),(display_height/2))
         gameDisplay.blit (TextSurf, TextRect)
