@@ -11,10 +11,14 @@ display_height = 600
 
 black = (0,0,0)
 white = (255,255,255)
+
 red = (255,0,0)
 green = (0,255,0)
 blue = (0,0,255)
 yellow = (255,255,0)
+
+dark_red = (200,0,0)
+dark_green = (0,200,0)
 
 car_width = 40
 car_height = 84
@@ -29,9 +33,7 @@ carImg = pygame.image.load('racecar.png')
 bg = pygame.image.load('BG.jpg')
 rock = pygame.image.load('rock.png')
 
-pygame.mixer.music.load('shift.wav')
-pygame.mixer.music.play(-1, 0.0)
-pygame.mixer.music.set_volume(0.5)
+
 
 def things_dodged(count):
     font = pygame.font.SysFont(None, 25)
@@ -45,14 +47,14 @@ def things(thingx , thingy, thingw, thingh):
 def car(x,y):
     gameDisplay.blit(carImg, (x,y))
 
-def text_objects(text, font):
-    textSurface = font.render(text, True, green)
+def text_objects(text, font, color):
+    textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
     
 
 def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 45)
-    TextSurf, TextRect = text_objects(text, largeText)
+    TextSurf, TextRect = text_objects(text, largeText, green)
     TextRect.center = ((display_width/2),(display_height/2))
     gameDisplay.blit (TextSurf, TextRect)
 
@@ -69,7 +71,49 @@ def crash(score):
     s.play()
 
     message_display(text)
+
+def button(msg,xPos,yPos,width,height,inactiveColor,activeColor,textColor, func=None):
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        
+        if xPos+width > mouse[0] > xPos and yPos+height > mouse[1] > yPos:
+            pygame.draw.rect(gameDisplay, activeColor, (xPos,yPos,width,height))
+            if click[0] == 1 and func != None:
+                func()
+                
+        else:
+            pygame.draw.rect(gameDisplay, inactiveColor, (xPos,yPos,width,height))
+
+        smallText = pygame.font.Font('freesansbold.ttf', 20)
+        textSurf, textRect = text_objects(msg, smallText, textColor)
+        textRect.center = ( (xPos+(width/2)), (yPos+(height/2)) )
+        gameDisplay.blit(textSurf, textRect)
+                   
+def Exit():
+    pygame.quit()
+    quit()
     
+def game_intro():
+    intro = True
+
+    while intro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Exit()
+
+            
+            
+        gameDisplay.fill(white)
+        largeText = pygame.font.Font('freesansbold.ttf',115)
+        TextSurf, TextRect = text_objects("Rock Race", largeText, black)
+        TextRect.center = ((display_width/2),(display_height/2))
+        gameDisplay.blit (TextSurf, TextRect)
+
+        button("GO!",150,450,100,50,dark_green,green,black, game_loop)
+        button("QUIT!",550,450,100,50,dark_red,red,black, Exit)
+        
+        pygame.display.update()
+        clock.tick(15)
     
 
 
@@ -77,7 +121,9 @@ def crash(score):
 
 def game_loop():
 
-    
+    pygame.mixer.music.load('shift.wav')
+    pygame.mixer.music.play(-1, 0.0)
+    pygame.mixer.music.set_volume(0.5)
     
     x = (display_width * 0.45)
     y = (display_height * 0.6)
@@ -105,12 +151,10 @@ def game_loop():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                Exit()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    quit()
+                    Exit()
                     
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -173,7 +217,6 @@ def game_loop():
 
 
 
-
+game_intro()
 game_loop()
-pygame.quit()
-quit()
+Exit()
